@@ -66,13 +66,21 @@ def dashboard(pdf_file):
         return redirect(url_for("index"))
 
 
-# Ruta para la búsqueda por texto con paginación
+# Ruta para la búsqueda por texto con paginación y rango de páginas
 @app.route("/search", methods=["POST"])
 def search():
     query = request.form["query"]
     pdf_file = request.form["pdf_file"]
+    start_page = int(
+        request.form["start_page"]
+    )  # Nueva adición: Obtener página de inicio del formulario
+    end_page = int(
+        request.form["end_page"]
+    )  # Nueva adición: Obtener página final del formulario
     pdf_path = os.path.join(app.config["UPLOAD_FOLDER"], pdf_file)
-    page_texts = read_pdf(pdf_path)
+    page_texts = read_pdf(
+        pdf_path, start_page, end_page
+    )  # Modificado: Llamar a read_pdf con el rango de páginas
 
     # Número de resultados por página
     results_per_page = 10
@@ -80,7 +88,9 @@ def search():
     results = []
     for i, text in enumerate(page_texts):
         if query in text:
-            results.append(i + 1)  # +1 porque las páginas comienzan en 1, no en 0
+            results.append(
+                start_page + i
+            )  # Modificado: Ajustar página base del resultado al rango especificado
 
     # Calcular el total de páginas
     total_pages = (len(results) + results_per_page - 1) // results_per_page
@@ -98,7 +108,9 @@ def search():
     # Obtener información de las páginas con resultados para la página actual
     pages_with_results = []
     for result in current_results:
-        page_text = page_texts[result - 1]  # Restamos 1 para obtener el índice correcto
+        page_text = page_texts[
+            result - start_page
+        ]  # Modificado: Ajustar índice de texto al rango especificado
         pages_with_results.append(
             {
                 "page_number": result,

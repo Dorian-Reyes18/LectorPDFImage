@@ -1,6 +1,6 @@
 {% extends "base.html" %} {% block content %}
 <div class="container">
-  <h1>Dashboard</h1>
+  <h1>Dashboard - {{ pdf_file }}</h1>
   <div class="row">
     <div class="col-md-8">
       <!-- Preview del PDF seleccionado -->
@@ -23,6 +23,22 @@
           name="query"
           class="form-control mb-3"
           placeholder="Buscar por palabra"
+        />
+        <input
+          type="number"
+          id="start-page-input"
+          name="start_page"
+          class="form-control mb-3"
+          placeholder="Página de inicio"
+          min="1"
+        />
+        <input
+          type="number"
+          id="end-page-input"
+          name="end_page"
+          class="form-control mb-3"
+          placeholder="Página final"
+          min="1"
         />
         <input
           type="hidden"
