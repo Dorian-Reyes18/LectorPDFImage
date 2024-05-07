@@ -1,5 +1,9 @@
 {% extends "base.html" %} {% block content %}
 <div class="container">
+  <!-- Botón para regresar al index -->
+  <a href="{{ url_for('index') }}" class="btn btn-secondary mb-3"
+    >Regresar al inicio</a
+  >
   <h1>Dashboard - {{ pdf_file }}</h1>
   <div class="row">
     <div class="col-md-8">
@@ -16,7 +20,7 @@
     </div>
     <div class="col-md-4">
       <!-- Barra de búsqueda -->
-      <form action="{{ url_for('search') }}" method="post">
+      <form id="search-form" action="{{ url_for('search') }}" method="post">
         <input
           type="text"
           id="search-input"
@@ -42,7 +46,7 @@
         />
         <input
           type="hidden"
-          id="pdf-path-input"
+          id="pdf-file-input"
           name="pdf_file"
           value="{{ pdf_file }}"
         />
@@ -54,5 +58,8 @@
       <p><strong>Cantidad de páginas:</strong> {{ num_pages }}</p>
     </div>
   </div>
+
+  {% include "js/search.validator.html" %}
 </div>
+
 {% endblock %}
