@@ -49,49 +49,49 @@
 
       // Función para resaltar la palabra clave en el texto
       function highlightText(text) {
-        return text.replace(new RegExp(query, "gi"), match => `<span class="highlight">${match}</span>`);
+          return text.replace(new RegExp(query, "gi"), match => `<span class="highlight">${match}</span>`);
       }
 
       // Mostrar los resultados de la búsqueda
       const searchResultsList = document.getElementById("search-results");
       if (pagesWithResults.length === 0) {
-        // Si no se encuentran resultados, mostrar un mensaje
-        const noResultsMessage = document.createElement("li");
-        noResultsMessage.classList.add("no-results");
-        noResultsMessage.textContent = "No se encontraron resultados para su búsqueda.";
-        searchResultsList.appendChild(noResultsMessage);
+          // Si no se encuentran resultados, mostrar un mensaje
+          const noResultsMessage = document.createElement("li");
+          noResultsMessage.classList.add("no-results");
+          noResultsMessage.textContent = "No se encontraron resultados para su búsqueda.";
+          searchResultsList.appendChild(noResultsMessage);
       } else {
-        // Si se encuentran resultados, mostrar cada resultado
-        pagesWithResults.forEach(page => {
-          const listItem = document.createElement("li");
-          listItem.classList.add("resultpage"); // Agregar la clase "resultpage" al elemento <li>
-          // Crear un div con la clase "info" para mostrar la información de la página
-          const infoDiv = document.createElement("div");
-          infoDiv.classList.add("info");
-          // Crear un div para mostrar la información de la página y encapsularlo en un div con la clase "match"
-          const matchDiv = document.createElement("div");
-          matchDiv.classList.add("match");
-          matchDiv.textContent = `Página ${page.page_number} (${page.count} coincidencias)`;
-          // Agregar el div de coincidencias al div de información
-          infoDiv.appendChild(matchDiv);
-          // Crear un div con la clase "result" para mostrar el texto resaltado
-          const resultDiv = document.createElement("div");
-          resultDiv.classList.add("result");
-          resultDiv.innerHTML += `${highlightText(page.text)}`;
-          // Agregar el div de texto resaltado al div de información
-          infoDiv.appendChild(resultDiv);
-          // Crear un enlace para ir a la página correspondiente en el dashboard
-          const goToPageLink = document.createElement("a");
-          goToPageLink.classList.add("pagekey"); // Agregar la clase "pagekey"
-          goToPageLink.href = `/dashboard/{{ pdf_file }}#page=${page.page_number}`; // Cambiar la URL al dashboard con el número de página
-          goToPageLink.textContent = "Ir a la página correspondiente"; // Cambiar el texto del enlace
-          // Agregar el enlace al div de información
-          infoDiv.appendChild(goToPageLink);
-          // Agregar el div de información al elemento de la lista
-          listItem.appendChild(infoDiv);
-          // Agregar el elemento de la lista a la lista de resultados
-          searchResultsList.appendChild(listItem);
-        });
+          // Si se encuentran resultados, mostrar cada resultado
+          pagesWithResults.forEach(page => {
+              const listItem = document.createElement("li");
+              listItem.classList.add("resultpage"); // Agregar la clase "resultpage" al elemento <li>
+              // Crear un div con la clase "info" para mostrar la información de la página
+              const infoDiv = document.createElement("div");
+              infoDiv.classList.add("info");
+              // Crear un div para mostrar la información de la página y encapsularlo en un div con la clase "match"
+              const matchDiv = document.createElement("div");
+              matchDiv.classList.add("match");
+              matchDiv.textContent = `Página ${page.page_number} (${page.count} coincidencias)`;
+              // Agregar el div de coincidencias al div de información
+              infoDiv.appendChild(matchDiv);
+              // Crear un div con la clase "result" para mostrar el texto resaltado
+              const resultDiv = document.createElement("div");
+              resultDiv.classList.add("result");
+              resultDiv.innerHTML += `${highlightText(page.text)}`;
+              // Agregar el div de texto resaltado al div de información
+              infoDiv.appendChild(resultDiv);
+              // Crear un enlace para ir a la página correspondiente en el dashboard
+              const goToPageLink = document.createElement("a");
+              goToPageLink.classList.add("pagekey"); // Agregar la clase "pagekey"
+              goToPageLink.href = `/dashboard/{{ pdf_file }}#page=${page.page_number}`; // Cambiar la URL al dashboard con el número de página
+              goToPageLink.textContent = "Ir a la página correspondiente"; // Cambiar el texto del enlace
+              // Agregar el enlace al div de información
+              infoDiv.appendChild(goToPageLink);
+              // Agregar el div de información al elemento de la lista
+              listItem.appendChild(infoDiv);
+              // Agregar el elemento de la lista a la lista de resultados
+              searchResultsList.appendChild(listItem);
+          });
       }
 
       // Mostrar la palabra clave en el título
