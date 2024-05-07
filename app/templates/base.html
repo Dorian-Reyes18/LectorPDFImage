@@ -1,0 +1,31 @@
+<!-- templates/base.html -->
+
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>PDF Text Extraction App</title>
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='css/bootstrap.min.css') }}"
+    />
+    <!-- Agregar otros enlaces a archivos CSS aquí -->
+  </head>
+  <body>
+    <!-- Barra de navegación -->
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+      <div class="container">
+        <a class="navbar-brand" href="#">PDF Text Extraction App</a>
+      </div>
+    </nav>
+
+    <!-- Contenido de la página -->
+    {% block content %} {% endblock %}
+
+    <!-- Scripts -->
+    <script src="{{ url_for('static', filename='js/jquery.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/bootstrap.min.js') }}"></script>
+    <!-- Agregar otros enlaces a archivos JavaScript aquí -->
+  </body>
+</html>

@@ -1,0 +1,46 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="container">
+  <h1>PDF Text Extraction App</h1>
+  <form
+    id="upload-form"
+    action="{{ url_for('upload_pdf') }}"
+    method="post"
+    enctype="multipart/form-data"
+  >
+    <input
+      type="file"
+      id="pdf-file"
+      name="pdf_file"
+      class="form-control mb-3"
+    />
+    <!-- Agregar mensaje de progreso -->
+    <div id="upload-progress" style="display: none;">
+      Cargando archivo...
+      <progress id="progress-bar" value="0" max="100"></progress>
+      <span id="progress-label">0%</span>
+    </div>
+    <button type="submit" class="btn btn-primary mb-3">Cargar PDF</button>
+  </form>
+</div>
+
+<!-- Agregar script JavaScript -->
+<script>
+  // Función para mostrar el progreso de carga del archivo
+  function updateProgress(event) {
+    const progressBar = document.getElementById("progress-bar");
+    const progressLabel = document.getElementById("progress-label");
+    if (event.lengthComputable) {
+      const percentComplete = (event.loaded / event.total) * 100;
+      progressBar.value = percentComplete;
+      progressLabel.textContent = `${Math.round(percentComplete)}%`;
+    }
+  }
+
+  // Mostrar el mensaje de progreso cuando se envía el formulario
+  document.getElementById("upload-form").addEventListener("submit", () => {
+    const progressContainer = document.getElementById("upload-progress");
+    progressContainer.style.display = "block";
+  });
+</script>
+{% endblock %}
