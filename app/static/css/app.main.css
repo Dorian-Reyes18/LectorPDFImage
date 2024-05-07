@@ -1,3 +1,20 @@
+.palabra {
+  color: purple; }
 
+.search-results .no-results {
+  font-weight: bold;
+  color: red; }
+.search-results .resultpage .info {
+  margin-bottom: 10px; }
+  .search-results .resultpage .info .match {
+    margin-bottom: 5px;
+    font-weight: bold; }
+  .search-results .resultpage .info .result {
+    margin-bottom: 10px; }
+    .search-results .resultpage .info .result .highlight {
+      background-color: yellow;
+      font-weight: bold; }
+  .search-results .resultpage .info .pagekey {
+    font-size: 16px; }
 
 /*# sourceMappingURL=app.main.css.map */

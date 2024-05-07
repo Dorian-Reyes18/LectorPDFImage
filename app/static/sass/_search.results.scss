@@ -1,0 +1,28 @@
+.palabra {
+  color: purple;
+}
+.search-results {
+  .no-results {
+    font-weight: bold;
+    color: red;
+  }
+  .resultpage {
+    .info {
+      margin-bottom: 10px;
+      .match {
+        margin-bottom: 5px;
+        font-weight: bold;
+      }
+      .result {
+        margin-bottom: 10px;
+        .highlight {
+          background-color: yellow;
+          font-weight: bold;
+        }
+      }
+      .pagekey {
+        font-size: 16px;
+      }
+    }
+  }
+}
