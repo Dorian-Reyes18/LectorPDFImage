@@ -1,6 +1,7 @@
 from flask import Flask, render_template, request, redirect, flash, url_for
-from pdf_reader import read_pdf
 import os
+from pdf_reader import read_pdf  # Importar la función read_pdf desde pdf_reader
+from PyPDF2 import PdfReader  # Importa la clase PdfReader de PyPDF2
 from werkzeug.utils import secure_filename
 
 app = Flask(__name__, static_folder="static")
@@ -21,7 +22,9 @@ def allowed_file(filename):
 # Ruta para la página principal
 @app.route("/")
 def index():
-    return render_template("index.html")
+    # Obtener la lista de archivos PDF en la carpeta pdf_files
+    pdf_files = [file for file in os.listdir(UPLOAD_FOLDER) if file.endswith(".pdf")]
+    return render_template("index.html", pdf_files=pdf_files)
 
 
 # Ruta para cargar el documento PDF
@@ -42,25 +45,24 @@ def upload_pdf():
         pdf_path = os.path.join(app.config["UPLOAD_FOLDER"], filename)
         pdf_file.save(pdf_path)
         flash("El archivo PDF se ha cargado correctamente", "success")
-        return redirect(
-            url_for("dashboard", pdf_path=pdf_path)
-        )  # Redirigir al dashboard con el path del PDF cargado
+        return redirect(url_for("dashboard", pdf_file=filename))
 
     flash("El archivo seleccionado no es un PDF válido", "error")
     return redirect(url_for("index"))
 
 
-# Ruta para el dashboard (preview del PDF cargado)
-@app.route("/dashboard")
-def dashboard():
-    pdf_path = request.args.get("pdf_path")
-    if pdf_path:
+# Ruta para el dashboard (preview del PDF seleccionado)
+@app.route("/dashboard/<pdf_file>")
+def dashboard(pdf_file):
+    pdf_path = os.path.join(app.static_folder, "pdf_files", pdf_file)
+    if os.path.exists(pdf_path):
         # Obtener el número de páginas del PDF
-        page_texts = read_pdf(pdf_path)
-        num_pages = len(page_texts)
-        return render_template("dashboard.html", pdf_path=pdf_path, num_pages=num_pages)
+        with open(pdf_path, "rb") as f:
+            pdf_reader = PdfReader(f)
+            num_pages = len(pdf_reader.pages)
+        return render_template("dashboard.html", pdf_file=pdf_file, num_pages=num_pages)
     else:
-        flash("No se ha cargado ningún PDF", "error")
+        flash("El PDF seleccionado no existe", "error")
         return redirect(url_for("index"))
 
 
@@ -68,8 +70,9 @@ def dashboard():
 @app.route("/search", methods=["POST"])
 def search():
     query = request.form["query"]
-    pdf_path = request.form["pdf_path"]
-    page_texts = read_pdf(pdf_path)
+    pdf_file = request.form["pdf_file"]
+    pdf_path = os.path.join(app.config["UPLOAD_FOLDER"], pdf_file)
+    page_texts = read_pdf(pdf_path)  # Utilizar la función read_pdf importada
     results = []
     for i, text in enumerate(page_texts):
         if query in text:
@@ -90,7 +93,7 @@ def search():
         "search_results.html",
         query=query,
         pages_with_results=pages_with_results,
-        pdf_path=pdf_path,
+        pdf_file=pdf_file,
     )
 
 

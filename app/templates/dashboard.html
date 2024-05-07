@@ -3,19 +3,15 @@
   <h1>Dashboard</h1>
   <div class="row">
     <div class="col-md-8">
-      <!-- Preview inicial del PDF con las primeras páginas -->
+      <!-- Preview del PDF seleccionado -->
       <div id="pdf-preview-container">
-        {% for page_number in range(1, min(num_pages, 5) + 1) %}
         <embed
-          src="{{ url_for('pdf_page', pdf_path=pdf_path, page_number=page_number) }}"
+          src="{{ url_for('static', filename='pdf_files/' + pdf_file) }}"
           type="application/pdf"
           class="pdf-page"
+          width="100%"
+          height="600px"
         />
-        {% endfor %}
-      </div>
-      <!-- Indicador de carga de páginas adicionales -->
-      <div id="loading-indicator" style="display: none">
-        Cargando más páginas...
       </div>
     </div>
     <div class="col-md-4">
@@ -31,59 +27,16 @@
         <input
           type="hidden"
           id="pdf-path-input"
-          name="pdf_path"
-          value="{{ pdf_path }}"
+          name="pdf_file"
+          value="{{ pdf_file }}"
         />
         <button type="submit" class="btn btn-primary mb-3">Buscar</button>
       </form>
+
       <!-- Información del PDF -->
       <h4>Información del PDF:</h4>
       <p><strong>Cantidad de páginas:</strong> {{ num_pages }}</p>
     </div>
   </div>
 </div>
-
-<script>
-  // Función para cargar más páginas del PDF cuando el usuario se desplaza hacia abajo
-  function loadMorePages() {
-    const container = document.getElementById("pdf-preview-container");
-    const loadingIndicator = document.getElementById("loading-indicator");
-    const lastPage = container.querySelector(".pdf-page:last-child");
-    const lastPageNumber = parseInt(lastPage.getAttribute("data-page-number"));
-
-    if (lastPageNumber < {{ num_pages }}) {
-      const nextPageNumber = lastPageNumber + 1;
-      const nextPage = document.createElement("embed");
-      nextPage.src = `{{ url_for('pdf_page', pdf_path=pdf_path, page_number='__page_number__') }}`.replace("__page_number__", nextPageNumber);
-      nextPage.type = "application/pdf";
-      nextPage.classList.add("pdf-page");
-      nextPage.setAttribute("data-page-number", nextPageNumber);
-      container.appendChild(nextPage);
-      loadingIndicator.style.display = "none";
-    }
-  }
-
-  // Detectar el evento de desplazamiento del usuario y cargar más páginas cuando sea necesario
-  window.addEventListener("scroll", () => {
-    const container = document.getElementById("pdf-preview-container");
-    const loadingIndicator = document.getElementById("loading-indicator");
-    const lastPage = container.querySelector(".pdf-page:last-child");
-    const lastPageOffset = lastPage.getBoundingClientRect().bottom;
-
-    if (lastPageOffset <= window.innerHeight) {
-      loadingIndicator.style.display = "block";
-      loadMorePages();
-    }
-  });
-
-  // Cargar más páginas cuando la página se cargue por primera vez si es necesario
-  document.addEventListener("DOMContentLoaded", () => {
-    const container = document.getElementById("pdf-preview-container");
-    const numPages = {{ num_pages }};
-
-    if (container.offsetHeight <= window.innerHeight && numPages > 5) {
-      loadMorePages();
-    }
-  });
-</script>
 {% endblock %}

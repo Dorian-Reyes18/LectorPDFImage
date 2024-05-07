@@ -80,11 +80,11 @@
           resultDiv.innerHTML += `${highlightText(page.text)}`;
           // Agregar el div de texto resaltado al div de información
           infoDiv.appendChild(resultDiv);
-          // Crear un enlace para ir a la página
+          // Crear un enlace para ir a la página correspondiente en el dashboard
           const goToPageLink = document.createElement("a");
           goToPageLink.classList.add("pagekey"); // Agregar la clase "pagekey"
-          goToPageLink.href = "/"; // Cambiar la URL a la página de inicio
-          goToPageLink.textContent = "Ir a la página de inicio"; // Cambiar el texto del enlace
+          goToPageLink.href = `/dashboard/{{ pdf_file }}#page=${page.page_number}`; // Cambiar la URL al dashboard con el número de página
+          goToPageLink.textContent = "Ir a la página correspondiente"; // Cambiar el texto del enlace
           // Agregar el enlace al div de información
           infoDiv.appendChild(goToPageLink);
           // Agregar el div de información al elemento de la lista
