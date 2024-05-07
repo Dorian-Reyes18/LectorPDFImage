@@ -1,10 +1,25 @@
 import fitz  # PyMuPDF
 import pytesseract
-from PIL import Image
+from PIL import Image, ImageEnhance, ImageFilter, ImageOps
 from io import BytesIO
 
 # Especifica la ruta directa donde se instaló Tesseract
 pytesseract.pytesseract.tesseract_cmd = r"C:\Program Files\Tesseract-OCR\tesseract.exe"
+
+
+# Función para preprocesar una imagen antes de OCR
+def preprocess_image(image):
+    # Aumentar el contraste
+    enhancer = ImageEnhance.Contrast(image)
+    image = enhancer.enhance(2.0)  # Aumentar el contraste al 200%
+
+    # Aplicar filtro de nitidez
+    image = image.filter(ImageFilter.SHARPEN)
+
+    # Aplicar inversión de color
+    image = ImageOps.invert(image)
+
+    return image
 
 
 # Función para leer el texto de las imágenes en un rango de páginas del PDF
@@ -32,10 +47,13 @@ def read_pdf(pdf_path, start_page, end_page):
                     # Convertir bytes a imagen PIL
                     image = Image.open(BytesIO(image_bytes))
 
+                    # Preprocesar la imagen antes de OCR
+                    preprocessed_image = preprocess_image(image)
+
                     # Verificar si la imagen se puede procesar con pytesseract
-                    if image.mode in ["RGB", "L"]:
+                    if preprocessed_image.mode in ["RGB", "L"]:
                         # Convertir imagen PIL a texto
-                        image_text = pytesseract.image_to_string(image)
+                        image_text = pytesseract.image_to_string(preprocessed_image)
                         page_text += image_text
 
             page_texts.append(page_text)
