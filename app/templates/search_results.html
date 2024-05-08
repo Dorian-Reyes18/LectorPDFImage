@@ -5,6 +5,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Search Results</title>
     <link rel="stylesheet" href="../static/css/app.main.css" />
+    <style>
+      .highlight {
+        background-color: yellow;
+      }
+    </style>
   </head>
   <body>
     <h1>
@@ -16,6 +21,24 @@
     </h1>
     <ul id="search-results" class="search-results">
       <!-- Aquí se agregarán los resultados -->
+      {% set seen_pages = [] %} {% for result in pages_with_results %} {% if
+      result.page_number not in seen_pages %} {% set _ =
+      seen_pages.append(result.page_number) %}
+      <li class="resultpage">
+        <div class="info">
+          <div class="match">
+            Página {{ result.page_number }} ({{ result.count }} coincidencias)
+          </div>
+          <div class="result">{{ result.text | safe }}</div>
+          <!-- Cambio aquí -->
+          <a
+            class="pagekey"
+            href="/dashboard/{{ pdf_file }}#page={{ result.page_number }}"
+            >Ir a la página correspondiente</a
+          >
+        </div>
+      </li>
+      {% endif %} {% endfor %}
     </ul>
 
     {% include "js/search.result.js.html" %}

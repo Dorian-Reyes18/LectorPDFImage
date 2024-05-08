@@ -1,12 +1,10 @@
 <script>
   document.addEventListener("DOMContentLoaded", function () {
     const form = document.getElementById("search-form");
-
     form.addEventListener("submit", function (event) {
       const queryInput = document.getElementById("search-input").value;
       const startPageInput = document.getElementById("start-page-input").value;
       const endPageInput = document.getElementById("end-page-input").value;
-
       if (!queryInput || !startPageInput || !endPageInput) {
         event.preventDefault(); // Detener el envío del formulario si falta algún campo
         alert("Por favor, complete todos los campos antes de buscar.");

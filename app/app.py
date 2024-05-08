@@ -1,7 +1,7 @@
 from flask import Flask, render_template, request, redirect, flash, url_for
 import os
-from pdf_reader import read_pdf  # Importar la función read_pdf desde pdf_reader
-from PyPDF2 import PdfReader  # Importa la clase PdfReader de PyPDF2
+from pdf_reader import read_pdf
+from PyPDF2 import PdfReader
 from werkzeug.utils import secure_filename
 
 app = Flask(__name__, static_folder="static")
@@ -66,41 +66,37 @@ def dashboard(pdf_file):
         return redirect(url_for("index"))
 
 
-# Ruta para la búsqueda por texto con paginación y rango de páginas
+# Ruta para la búsqueda por texto con paginación
 @app.route("/search", methods=["POST"])
 def search():
     query = request.form["query"]
     pdf_file = request.form["pdf_file"]
-    start_page = int(
-        request.form["start_page"]
-    )  # Nueva adición: Obtener página de inicio del formulario
-    end_page = int(
-        request.form["end_page"]
-    )  # Nueva adición: Obtener página final del formulario
     pdf_path = os.path.join(app.config["UPLOAD_FOLDER"], pdf_file)
-    page_texts = read_pdf(
-        pdf_path, start_page, end_page
-    )  # Modificado: Llamar a read_pdf con el rango de páginas
 
-    # Número de resultados por página
-    results_per_page = 10
+    # Páginas totales y resultados por página
+    start_page = int(request.args.get("start_page", 1))
+    end_page = int(request.args.get("end_page", 10))
 
+    # Extraer texto del PDF con EasyOCR
+    page_texts = read_pdf(pdf_path, start_page, end_page)
+
+    # Resultados de búsqueda
     results = []
     for i, text in enumerate(page_texts):
         if query in text:
             results.append(
-                start_page + i
-            )  # Modificado: Ajustar página base del resultado al rango especificado
+                i + start_page
+            )  # Número de página, comenzando desde start_page
 
     # Calcular el total de páginas
-    total_pages = (len(results) + results_per_page - 1) // results_per_page
+    total_pages = (len(results) + end_page - start_page) // (end_page - start_page + 1)
 
-    # Obtener el número de página solicitado
-    page_number = int(request.args.get("page", 1))
+    # Página actual
+    page_number = int(request.args.get("page", start_page))
 
     # Calcular el rango de resultados para la página actual
-    start_index = (page_number - 1) * results_per_page
-    end_index = min(start_index + results_per_page, len(results))
+    start_index = (page_number - start_page) * (end_page - start_page + 1)
+    end_index = min(start_index + (end_page - start_page + 1), len(results))
 
     # Obtener los resultados para la página actual
     current_results = results[start_index:end_index]
@@ -108,16 +104,17 @@ def search():
     # Obtener información de las páginas con resultados para la página actual
     pages_with_results = []
     for result in current_results:
-        page_text = page_texts[
-            result - start_page
-        ]  # Modificado: Ajustar índice de texto al rango especificado
-        pages_with_results.append(
-            {
-                "page_number": result,
-                "text": page_text,
-                "count": page_text.lower().count(query.lower()),
-            }
-        )
+        page_number = result
+        page_text = page_texts[page_number - start_page]
+        # Verificar si la página ya está en la lista
+        if page_number not in [page["page_number"] for page in pages_with_results]:
+            pages_with_results.append(
+                {
+                    "page_number": page_number,
+                    "text": page_text,
+                    "count": page_text.lower().count(query.lower()),
+                }
+            )
 
     return render_template(
         "search_results.html",

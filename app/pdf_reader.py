@@ -1,10 +1,7 @@
 import fitz  # PyMuPDF
-import pytesseract
 from PIL import Image, ImageEnhance, ImageFilter, ImageOps
 from io import BytesIO
-
-# Especifica la ruta directa donde se instaló Tesseract
-pytesseract.pytesseract.tesseract_cmd = r"C:\Program Files\Tesseract-OCR\tesseract.exe"
+import easyocr
 
 
 # Función para preprocesar una imagen antes de OCR
@@ -27,6 +24,9 @@ def read_pdf(pdf_path, start_page, end_page):
     page_texts = []
 
     try:
+        # Inicializar EasyOCR
+        reader = easyocr.Reader(["es"])
+
         # Abrir el PDF
         pdf_document = fitz.open(pdf_path)
 
@@ -50,11 +50,22 @@ def read_pdf(pdf_path, start_page, end_page):
                     # Preprocesar la imagen antes de OCR
                     preprocessed_image = preprocess_image(image)
 
-                    # Verificar si la imagen se puede procesar con pytesseract
-                    if preprocessed_image.mode in ["RGB", "L"]:
-                        # Convertir imagen PIL a texto
-                        image_text = pytesseract.image_to_string(preprocessed_image)
-                        page_text += image_text
+                    # Convertir la imagen preprocesada a bytes
+                    buffer = BytesIO()
+                    preprocessed_image.save(buffer, format="JPEG")
+                    buffer.seek(0)
+                    image_bytes = buffer.read()
+
+                    # Utilizar EasyOCR para extraer el texto
+                    results = reader.readtext(image_bytes)
+
+                    # Imprimir el texto extraído de la imagen
+                    print("Texto extraído de la imagen:", results)
+
+                    # Concatenar los resultados de EasyOCR en una sola cadena
+                    image_text = " ".join([result[1] for result in results])
+
+                    page_text += image_text
 
             page_texts.append(page_text)
 
@@ -63,3 +74,10 @@ def read_pdf(pdf_path, start_page, end_page):
         print("Error al procesar el PDF:", e)
 
     return page_texts
+
+
+# Ejemplo de uso:
+pdf_path = "ruta/al/pdf.pdf"
+start_page = 1
+end_page = 3
+texts = read_pdf(pdf_path, start_page, end_page)
