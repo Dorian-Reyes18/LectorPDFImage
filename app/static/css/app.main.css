@@ -245,22 +245,51 @@ a {
           margin-bottom: 30px; }
 
 .palabra {
-  color: purple; }
+  color: #1640ff; }
 
-.search-results .no-results {
-  font-weight: bold;
-  color: red; }
-.search-results .resultpage .info {
-  margin-bottom: 10px; }
-  .search-results .resultpage .info .match {
-    margin-bottom: 5px;
-    font-weight: bold; }
-  .search-results .resultpage .info .result {
-    margin-bottom: 10px; }
-    .search-results .resultpage .info .result .highlight {
-      background-color: yellow;
-      font-weight: bold; }
-  .search-results .resultpage .info .pagekey {
-    font-size: 16px; }
+h1 {
+  font-size: 25px;
+  text-align: center;
+  padding: 20px 0; }
+
+.search-results {
+  margin: 0;
+  display: grid;
+  justify-items: center; }
+  .search-results .no-results {
+    font-weight: bold;
+    color: red; }
+  .search-results .resultpage {
+    margin-bottom: 20px;
+    border-left: 18px solid #b148c3;
+    padding: 20px 40px;
+    width: 1100px;
+    list-style: none;
+    background: #fff;
+    border-radius: 10px;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.15); }
+    .search-results .resultpage .info {
+      text-align: center;
+      margin-bottom: 10px; }
+      .search-results .resultpage .info .match {
+        font-family: "Montserrat-alternates-bold";
+        color: #800080;
+        text-align: left;
+        font-size: 16px;
+        margin-bottom: 18px;
+        font-weight: bold; }
+      .search-results .resultpage .info .result {
+        font-family: "Montserrat-alternates";
+        padding-left: 30px;
+        text-align: left;
+        margin-bottom: 20px; }
+        .search-results .resultpage .info .result .highlight {
+          background-color: yellow;
+          font-weight: bold; }
+      .search-results .resultpage .info .pagekey {
+        font-family: "Montserrat-alternates-bold";
+        text-decoration: none;
+        font-size: 16px;
+        color: #af32db; }
 
 /*# sourceMappingURL=app.main.css.map */

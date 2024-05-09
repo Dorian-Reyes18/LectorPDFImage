@@ -1,54 +1,40 @@
-<!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Search Results</title>
-    <link rel="stylesheet" href="../static/css/app.main.css" />
-    <style>
-      .highlight {
-        background-color: yellow;
-      }
-    </style>
-  </head>
-  <body>
-    <h1>
-      Búsqueda de resultados para la palabra "<span
-        class="palabra"
-        id="search-query"
-      ></span
-      >"
-    </h1>
-    <ul id="search-results" class="search-results">
-      <!-- Aquí se agregarán los resultados -->
-      {% set seen_pages = [] %} {% for result in pages_with_results %} {% if
-      result.page_number not in seen_pages %} {% set _ =
-      seen_pages.append(result.page_number) %}
-      <li class="resultpage">
-        <div class="info">
-          <div class="match">
-            Página {{ result.page_number }} ({{ result.count }} coincidencias)
-          </div>
-          <div class="result">{{ result.text | safe }}</div>
-          <!-- Cambio aquí -->
-          <a
-            class="pagekey"
-            href="/dashboard/{{ pdf_file }}#page={{ result.page_number }}"
-            >Ir a la página correspondiente</a
-          >
-        </div>
-      </li>
-      {% endif %} {% endfor %}
-    </ul>
+{% extends "base.html" %} {% block content %}
+<h1>
+  Búsqueda de resultados para la palabra "<span
+    class="palabra"
+    id="search-query"
+  ></span
+  >"
+</h1>
+<ul id="search-results" class="search-results">
+  <!-- Aquí se agregarán los resultados -->
+  {% set seen_pages = [] %} {% for result in pages_with_results %} {% if
+  result.page_number not in seen_pages %} {% set _ =
+  seen_pages.append(result.page_number) %}
+  <li class="resultpage">
+    <div class="info">
+      <div class="match">
+        Página {{ result.page_number }} -
+        <span style="color: #ff72a5">{{ result.count }} coincidencias</span>
+      </div>
+      <div class="result">{{ result.text | safe }}</div>
+      <!-- Cambio aquí -->
+      <a
+        class="pagekey"
+        href="/dashboard/{{ pdf_file }}#page={{ result.page_number }}"
+        >Ir al Dashboard</a
+      >
+    </div>
+  </li>
+  {% endif %} {% endfor %}
+</ul>
 
-    <!-- Agregar campos ocultos para start_page y end_page -->
-    <form id="search-form" action="{{ url_for('search') }}" method="POST">
-      <input type="hidden" name="query" value="{{ query }}" />
-      <input type="hidden" name="pdf_file" value="{{ pdf_file }}" />
-      <input type="hidden" name="start_page" value="{{ start_page }}" />
-      <input type="hidden" name="end_page" value="{{ end_page }}" />
-    </form>
+<!-- Agregar campos ocultos para start_page y end_page -->
+<form id="search-form" action="{{ url_for('search') }}" method="POST">
+  <input type="hidden" name="query" value="{{ query }}" />
+  <input type="hidden" name="pdf_file" value="{{ pdf_file }}" />
+  <input type="hidden" name="start_page" value="{{ start_page }}" />
+  <input type="hidden" name="end_page" value="{{ end_page }}" />
+</form>
 
-    {% include "js/search.result.js.html" %}
-  </body>
-</html>
+{% include "js/search.result.js.html" %} {% endblock %}
