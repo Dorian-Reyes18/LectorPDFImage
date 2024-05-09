@@ -128,4 +128,4 @@ def search():
 
 if __name__ == "__main__":
     app.secret_key = "super_secret_key"  # Clave secreta para mensajes flash
-    app.run(debug=True)
+    app.run(debug=False)
