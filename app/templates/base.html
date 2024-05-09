@@ -6,18 +6,27 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>PDF Text Extraction App</title>
-    <link
-      rel="stylesheet"
-      href="{{ url_for('static', filename='css/bootstrap.min.css') }}"
-    />
+    <link rel="stylesheet" href="../static/css/app.main.css" />
     <!-- Agregar otros enlaces a archivos CSS aquí -->
   </head>
   <body>
     <!-- Barra de navegación -->
-    <nav class="navbar navbar-expand-lg navbar-light bg-light">
-      <div class="container">
-        <a class="navbar-brand" href="#">PDF Text Extraction App</a>
-      </div>
+    <nav class="navbar">
+      <ul class="navbar-nav">
+        <li class="nav-item">
+          <a class="nav-link" href="{{ url_for('index') }}">Inicio</a>
+        </li>
+        {% if 'dashboard' in request.path or 'search' in request.path %}
+        <li
+          class="nav-item {% if 'dashboard' in request.path or 'search' in request.path %}active{% endif %}"
+        >
+          <a class="nav-link disabled" href="#">
+            {% if 'dashboard' in request.path %} Dashboard {% elif 'search' in
+            request.path %} Results {% endif %}
+          </a>
+        </li>
+        {% endif %}
+      </ul>
     </nav>
 
     <!-- Contenido de la página -->

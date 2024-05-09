@@ -1,0 +1,86 @@
+.index-background {
+  background-image: url("../img/bg.png");
+  background-size: cover;
+  background-repeat: no-repeat;
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  .card {
+    width: 662px;
+    height: 607px;
+    background: #fff;
+    border-top-right-radius: 27px;
+    border-bottom-left-radius: 27px;
+
+    .tit {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 78px;
+      color: #7e2f8a;
+    }
+
+    .head {
+      border-top-right-radius: 27px;
+      background-image: url("../img/Union.svg");
+      height: 128px;
+
+      h1 {
+        padding: 27px 27px 0 27px;
+        color: #fff;
+      }
+    }
+    .body {
+      padding: 0 10%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      height: 315px;
+
+      ul {
+        padding: 0 30px;
+        width: 70%;
+        width: 100%;
+        height: auto;
+        overflow-y: auto;
+        li {
+          margin-bottom: 20px;
+          list-style: none;
+          display: flex;
+          align-items: center;
+          transition: transform 0.3s ease;
+          -webkit-transition: transform 0.3s ease;
+          -moz-transition: transform 0.3s ease;
+          -ms-transition: transform 0.3s ease;
+          -o-transition: transform 0.3s ease;
+
+          &:hover {
+            transform: scale(1.05);
+            -webkit-transform: scale(1.05);
+            -moz-transform: scale(1.05);
+            -ms-transform: scale(1.05);
+            -o-transform: scale(1.05);
+          }
+
+          .pdf {
+            margin-right: 15px;
+          }
+          a {
+            font-size: 18px;
+            text-decoration: none;
+          }
+        }
+      }
+    }
+    .foot {
+      width: 100%;
+      height: 86px;
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      justify-content: center;
+    }
+  }
+}

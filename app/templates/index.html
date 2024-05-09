@@ -1,12 +1,26 @@
-{% extends "base.html" %} {% block content %}
-<div class="container">
-  <h1>Lista de PDFs</h1>
-  <ul>
-    {% for pdf_file in pdf_files %}
-    <li>
-      <a href="{{ url_for('dashboard', pdf_file=pdf_file) }}">{{ pdf_file }}</a>
-    </li>
-    {% endfor %}
-  </ul>
+<link rel="stylesheet" href="../static/css/app.main.css" />
+{% block content %}
+<div class="container index-background">
+  <div class="card">
+    <div class="head">
+      <h1>PDFs Disponibles</h1>
+    </div>
+    <h2 class="tit">Seleccione uno</h2>
+    <div class="body">
+      <ul>
+        {% for pdf_file in pdf_files %}
+        <li>
+          <img src="../static/img/PDF.svg" class="pdf" />
+          <a href="{{ url_for('dashboard', pdf_file=pdf_file) }}"
+            >{{ pdf_file }}</a
+          >
+        </li>
+        {% endfor %}
+      </ul>
+    </div>
+    <div class="foot">
+      <h2 class="marca">@By_Yan_18</h2>
+    </div>
+  </div>
 </div>
 {% endblock %}

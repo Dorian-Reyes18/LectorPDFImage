@@ -1,0 +1,125 @@
+body {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  background: #ffe9ff;
+}
+
+h1 {
+  margin: 0;
+}
+h2 {
+  margin: 0;
+}
+
+.navbar {
+  background-image: linear-gradient(to right, #982daa, #ee88ff);
+  .navbar-nav {
+    margin: 0;
+    text-decoration: none;
+    list-style: none;
+    height: 60px;
+    display: flex;
+    align-items: center;
+    .nav-item {
+      display: flex;
+      align-items: center;
+      height: 87%;
+      padding: 0 40px;
+      .nav-link {
+        color: #fff;
+        font-size: 25px;
+        text-decoration: none;
+        transition: transform 0.3s ease;
+        -webkit-transition: transform 0.3s ease;
+        -moz-transition: transform 0.3s ease;
+        -ms-transition: transform 0.3s ease;
+        -o-transition: transform 0.3s ease;
+
+        &:hover {
+          transform: scale(1.1);
+          -webkit-transform: scale(1.1);
+          -moz-transform: scale(1.1);
+          -ms-transform: scale(1.1);
+          -o-transform: scale(1.1);
+        }
+      }
+    }
+
+    .active {
+      border-bottom: 7px solid #fc76ff;
+      a {
+        font-family: $font-Montserrat-bold;
+      }
+    }
+  }
+}
+
+input {
+  font-family: $font-Montserrat-regular;
+  height: 38px;
+  border-radius: 5px;
+  -webkit-border-radius: 6px;
+  -moz-border-radius: 5px;
+  -ms-border-radius: 5px;
+  -o-border-radius: 5px;
+  border: 2px solid #df66f2;
+  margin-bottom: 10px;
+  font-size: 14px;
+  padding-left: 10px;
+
+  &:focus {
+    outline: 3px solid #f9cfff;
+  }
+}
+label {
+  font-family: $font-Montserrat-regular;
+  display: flex;
+  width: 100%;
+  text-align: left;
+  margin-bottom: 8px;
+  font-weight: bold;
+}
+
+.marca {
+  font-size: 20px;
+  background-image: linear-gradient(to right, #a338b4, #47184e);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+button {
+  font-size: 16px;
+  color: #fff;
+  background: #d549f8;
+  height: 50px;
+  padding: 16px 40px;
+  border: none;
+  border-radius: 6px;
+  -webkit-border-radius: 6px;
+  -moz-border-radius: 6px;
+  -ms-border-radius: 6px;
+  -o-border-radius: 6px;
+
+  &:focus {
+    border: 2px solid #810794;
+  }
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-family: $font-Montserrat-bold;
+}
+
+p {
+  font-family: $font-Montserrat-regular;
+}
+a {
+  font-family: $font-Montserrat-regular;
+  color: #4b4b4b;
+}

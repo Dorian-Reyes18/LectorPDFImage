@@ -1,32 +1,79 @@
-{% extends "base.html" %} 
-{% block content %}
+{% extends "base.html" %} {% block content %}
 <div class="container">
-  <!-- Botón para regresar al index -->
-  <a href="{{ url_for('index') }}" class="btn btn-secondary mb-3">Regresar al inicio</a>
-  <h1>Dashboard - {{ pdf_file }}</h1>
-  <div class="row">
-    <div class="col-md-8">
-      <!-- Preview del PDF seleccionado -->
-      <div id="pdf-preview-container">
-        <embed src="{{ url_for('static', filename='pdf_files/' + pdf_file) }}" type="application/pdf" class="pdf-page" width="100%" height="600px" />
+  <h4><img src="../static/img/PDF.svg" class="pdf" /> {{ pdf_file }}</h4>
+  <div class="container2">
+    <div class="row">
+      <div class="col1">
+        <!-- Preview del PDF seleccionado -->
+        <div id="pdf-preview-container" class="pdf-preview">
+          <embed
+            src="{{ url_for('static', filename='pdf_files/' + pdf_file) }}"
+            type="application/pdf"
+            class="pdf-page"
+            width="100%"
+            height="600px"
+          />
+        </div>
+      </div>
+      <div class="col2">
+        <div class="card">
+          <!-- Barra de búsqueda -->
+          <form id="search-form" action="{{ url_for('search') }}" method="post">
+            <h3>Opciones de busqueda</h3>
+            <div class="email">
+              <label>Email address</label>
+              <input
+                type="text"
+                id="search-input"
+                name="query"
+                class="form-control mb-3"
+                placeholder="Buscar por palabra"
+                required
+              />
+            </div>
+            <div class="paginator-number">
+              <div class="n1">
+                <label>Inicio</label>
+                <input
+                  type="number"
+                  id="start-page-input"
+                  name="start_page"
+                  class="form-control mb-3"
+                  placeholder="Página de inicio"
+                  min="1"
+                  required
+                />
+              </div>
+              <div class="n2">
+                <label>Final</label>
+                <input
+                  type="number"
+                  id="end-page-input"
+                  name="end_page"
+                  class="form-control mb-3"
+                  placeholder="Página final"
+                  min="1"
+                  required
+                />
+              </div>
+            </div>
+            <input
+              type="hidden"
+              id="pdf-file-input"
+              name="pdf_file"
+              value="{{ pdf_file }}"
+            />
+            <button class="buscar" type="submit" class="btn btn-primary mb-3">
+              Buscar
+            </button>
+          </form>
+          <!--<p>{{ num_pages }} páginas</p>-->
+          <h2 style="margin-top: 20px" class="marca">@By_Yan_18</h2>
+        </div>
       </div>
     </div>
-    <div class="col-md-4">
-      <!-- Barra de búsqueda -->
-      <form id="search-form" action="{{ url_for('search') }}" method="post">
-        <input type="text" id="search-input" name="query" class="form-control mb-3" placeholder="Buscar por palabra" required />
-        <input type="number" id="start-page-input" name="start_page" class="form-control mb-3" placeholder="Página de inicio" min="1" required />
-        <input type="number" id="end-page-input" name="end_page" class="form-control mb-3" placeholder="Página final" min="1" required />
-        <input type="hidden" id="pdf-file-input" name="pdf_file" value="{{ pdf_file }}" />
-        <button type="submit" class="btn btn-primary mb-3">Buscar</button>
-      </form>
-      <!-- Información del PDF -->
-      <h4>Información del PDF:</h4>
-      <p><strong>Cantidad de páginas:</strong> {{ num_pages }}</p>
-    </div>
   </div>
-  
+
   {% include "js/search.validator.html" %}
 </div>
 {% endblock %}
-
