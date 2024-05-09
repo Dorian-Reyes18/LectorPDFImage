@@ -73,9 +73,9 @@ def search():
     pdf_file = request.form["pdf_file"]
     pdf_path = os.path.join(app.config["UPLOAD_FOLDER"], pdf_file)
 
-    # Páginas totales y resultados por página
-    start_page = int(request.args.get("start_page", 1))
-    end_page = int(request.args.get("end_page", 10))
+    # Obtener el rango de páginas del formulario
+    start_page = int(request.form["start_page"])
+    end_page = int(request.form["end_page"])
 
     # Extraer texto del PDF con EasyOCR
     page_texts = read_pdf(pdf_path, start_page, end_page)

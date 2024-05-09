@@ -41,6 +41,14 @@
       {% endif %} {% endfor %}
     </ul>
 
+    <!-- Agregar campos ocultos para start_page y end_page -->
+    <form id="search-form" action="{{ url_for('search') }}" method="POST">
+      <input type="hidden" name="query" value="{{ query }}" />
+      <input type="hidden" name="pdf_file" value="{{ pdf_file }}" />
+      <input type="hidden" name="start_page" value="{{ start_page }}" />
+      <input type="hidden" name="end_page" value="{{ end_page }}" />
+    </form>
+
     {% include "js/search.result.js.html" %}
   </body>
 </html>
