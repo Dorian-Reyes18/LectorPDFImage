@@ -1,46 +1,26 @@
-{% extends "base.html" %}
+<link rel="stylesheet" href="../static/css/app.main.css" />
 {% block content %}
-<div class="container">
-  <h1>PDF Text Extraction App</h1>
-  <form
-    id="upload-form"
-    action="{{ url_for('upload_pdf') }}"
-    method="post"
-    enctype="multipart/form-data"
-  >
-    <input
-      type="file"
-      id="pdf-file"
-      name="pdf_file"
-      class="form-control mb-3"
-    />
-    <!-- Agregar mensaje de progreso -->
-    <div id="upload-progress" style="display: none;">
-      Cargando archivo...
-      <progress id="progress-bar" value="0" max="100"></progress>
-      <span id="progress-label">0%</span>
+<div class="container index-background">
+  <div class="card">
+    <div class="head">
+      <h1>PDFs Disponibles</h1>
     </div>
-    <button type="submit" class="btn btn-primary mb-3">Cargar PDF</button>
-  </form>
+    <h2 class="tit">Seleccione uno</h2>
+    <div class="body">
+      <ul>
+        {% for pdf_file in pdf_files %}
+        <li>
+          <img src="../static/img/PDF.svg" class="pdf" />
+          <a href="{{ url_for('dashboard', pdf_file=pdf_file) }}"
+            >{{ pdf_file }}</a
+          >
+        </li>
+        {% endfor %}
+      </ul>
+    </div>
+    <div class="foot">
+      <h2 class="marca">@By_Yan_18</h2>
+    </div>
+  </div>
 </div>
-
-<!-- Agregar script JavaScript -->
-<script>
-  // Función para mostrar el progreso de carga del archivo
-  function updateProgress(event) {
-    const progressBar = document.getElementById("progress-bar");
-    const progressLabel = document.getElementById("progress-label");
-    if (event.lengthComputable) {
-      const percentComplete = (event.loaded / event.total) * 100;
-      progressBar.value = percentComplete;
-      progressLabel.textContent = `${Math.round(percentComplete)}%`;
-    }
-  }
-
-  // Mostrar el mensaje de progreso cuando se envía el formulario
-  document.getElementById("upload-form").addEventListener("submit", () => {
-    const progressContainer = document.getElementById("upload-progress");
-    progressContainer.style.display = "block";
-  });
-</script>
 {% endblock %}

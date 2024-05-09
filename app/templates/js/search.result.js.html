@@ -1,0 +1,21 @@
+<script>
+  // Obtener la palabra clave de la consulta
+  const query = "{{ query }}";
+
+  // Función para resaltar la palabra clave en el texto
+  function highlightText(text) {
+    return text.replace(
+      new RegExp(query, "gi"),
+      (match) => `<span class="highlight">${match}</span>`
+    );
+  }
+
+  // Mostrar los resultados de la búsqueda
+  const searchResultsList = document.getElementById("search-results");
+  searchResultsList.querySelectorAll(".result").forEach(function (element) {
+    element.innerHTML = highlightText(element.innerHTML);
+  });
+
+  // Mostrar la palabra clave en el título
+  document.getElementById("search-query").textContent = query;
+</script>

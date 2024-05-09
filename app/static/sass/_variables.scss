@@ -1,0 +1,17 @@
+// Importa tus fuentes
+@font-face {
+  font-family: "Montserrat-alternates";
+  src: url("../fonts/MontserratAlternates-Regular.ttf") format("truetype");
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "Montserrat-alternates-bold";
+  src: url("../fonts/MontserratAlternates-ExtraBold.ttf") format("truetype");
+  font-style: normal;
+}
+
+// Define variables para las fuentes
+$font-Montserrat-regular: "Montserrat-alternates";
+$font-Montserrat-bold: "Montserrat-alternates-bold";

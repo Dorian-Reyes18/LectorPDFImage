@@ -1,6 +1,7 @@
 from flask import Flask, render_template, request, redirect, flash, url_for
-from pdf_reader import read_pdf
 import os
+from pdf_reader import read_pdf
+from PyPDF2 import PdfReader
 from werkzeug.utils import secure_filename
 
 app = Flask(__name__, static_folder="static")
@@ -21,7 +22,9 @@ def allowed_file(filename):
 # Ruta para la página principal
 @app.route("/")
 def index():
-    return render_template("index.html")
+    # Obtener la lista de archivos PDF en la carpeta pdf_files
+    pdf_files = [file for file in os.listdir(UPLOAD_FOLDER) if file.endswith(".pdf")]
+    return render_template("index.html", pdf_files=pdf_files)
 
 
 # Ruta para cargar el documento PDF
@@ -42,55 +45,84 @@ def upload_pdf():
         pdf_path = os.path.join(app.config["UPLOAD_FOLDER"], filename)
         pdf_file.save(pdf_path)
         flash("El archivo PDF se ha cargado correctamente", "success")
-        return redirect(
-            url_for("dashboard", pdf_path=pdf_path)
-        )  # Redirigir al dashboard con el path del PDF cargado
+        return redirect(url_for("dashboard", pdf_file=filename))
 
     flash("El archivo seleccionado no es un PDF válido", "error")
     return redirect(url_for("index"))
 
 
-# Ruta para el dashboard (preview del PDF cargado)
-@app.route("/dashboard")
-def dashboard():
-    pdf_path = request.args.get("pdf_path")
-    if pdf_path:
+# Ruta para el dashboard (preview del PDF seleccionado)
+@app.route("/dashboard/<pdf_file>")
+def dashboard(pdf_file):
+    pdf_path = os.path.join(app.static_folder, "pdf_files", pdf_file)
+    if os.path.exists(pdf_path):
         # Obtener el número de páginas del PDF
-        page_texts = read_pdf(pdf_path)
-        num_pages = len(page_texts)
-        return render_template("dashboard.html", pdf_path=pdf_path, num_pages=num_pages)
+        with open(pdf_path, "rb") as f:
+            pdf_reader = PdfReader(f)
+            num_pages = len(pdf_reader.pages)
+        return render_template("dashboard.html", pdf_file=pdf_file, num_pages=num_pages)
     else:
-        flash("No se ha cargado ningún PDF", "error")
+        flash("El PDF seleccionado no existe", "error")
         return redirect(url_for("index"))
 
 
-# Ruta para la búsqueda por texto
+# Ruta para la búsqueda por texto con paginación
 @app.route("/search", methods=["POST"])
 def search():
     query = request.form["query"]
-    pdf_path = request.form["pdf_path"]
-    page_texts = read_pdf(pdf_path)
+    pdf_file = request.form["pdf_file"]
+    pdf_path = os.path.join(app.config["UPLOAD_FOLDER"], pdf_file)
+
+    # Obtener el rango de páginas del formulario
+    start_page = int(request.form["start_page"])
+    end_page = int(request.form["end_page"])
+
+    # Extraer texto del PDF con EasyOCR
+    page_texts = read_pdf(pdf_path, start_page, end_page)
+
+    # Resultados de búsqueda
     results = []
     for i, text in enumerate(page_texts):
         if query in text:
-            results.append(i + 1)  # +1 porque las páginas comienzan en 1, no en 0
+            results.append(
+                i + start_page
+            )  # Número de página, comenzando desde start_page
 
+    # Calcular el total de páginas
+    total_pages = (len(results) + end_page - start_page) // (end_page - start_page + 1)
+
+    # Página actual
+    page_number = int(request.args.get("page", start_page))
+
+    # Calcular el rango de resultados para la página actual
+    start_index = (page_number - start_page) * (end_page - start_page + 1)
+    end_index = min(start_index + (end_page - start_page + 1), len(results))
+
+    # Obtener los resultados para la página actual
+    current_results = results[start_index:end_index]
+
+    # Obtener información de las páginas con resultados para la página actual
     pages_with_results = []
-    for result in results:
-        page_text = page_texts[result - 1]  # Restamos 1 para obtener el índice correcto
-        pages_with_results.append(
-            {
-                "page_number": result,
-                "text": page_text,
-                "count": page_text.lower().count(query.lower()),
-            }
-        )
+    for result in current_results:
+        page_number = result
+        page_text = page_texts[page_number - start_page]
+        # Verificar si la página ya está en la lista
+        if page_number not in [page["page_number"] for page in pages_with_results]:
+            pages_with_results.append(
+                {
+                    "page_number": page_number,
+                    "text": page_text,
+                    "count": page_text.lower().count(query.lower()),
+                }
+            )
 
     return render_template(
         "search_results.html",
         query=query,
         pages_with_results=pages_with_results,
-        pdf_path=pdf_path,
+        pdf_file=pdf_file,
+        total_pages=total_pages,
+        current_page=page_number,
     )
 
 
