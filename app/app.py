@@ -116,6 +116,11 @@ def search():
                 }
             )
 
+    # Mensaje si no se encontraron coincidencias
+    if not pages_with_results:
+        flash("No se encontraron coincidencias", "info")
+        print("No se encontraron coincidencias para la búsqueda:", query)
+
     return render_template(
         "search_results.html",
         query=query,
