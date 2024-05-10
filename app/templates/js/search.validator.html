@@ -12,3 +12,16 @@
     });
   });
 </script>
+
+<script>
+  // Obtener el formulario de búsqueda
+  const searchForm = document.getElementById("search-form");
+  // Obtener el modal de carga
+  const loadingModal = document.getElementById("loadingModal");
+
+  // Escuchar el evento de envío del formulario
+  searchForm.addEventListener("submit", function (event) {
+    // Agregar la clase 'show-modal' para mostrar el modal de carga
+    loadingModal.classList.add("show-modal");
+  });
+</script>

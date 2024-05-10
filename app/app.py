@@ -27,30 +27,6 @@ def index():
     return render_template("index.html", pdf_files=pdf_files)
 
 
-# Ruta para cargar el documento PDF
-@app.route("/upload_pdf", methods=["POST"])
-def upload_pdf():
-    if "pdf_file" not in request.files:
-        flash("No se ha seleccionado ningún archivo PDF", "error")
-        return redirect(url_for("index"))
-
-    pdf_file = request.files["pdf_file"]
-
-    if pdf_file.filename == "":
-        flash("No se ha seleccionado ningún archivo PDF", "error")
-        return redirect(url_for("index"))
-
-    if pdf_file and allowed_file(pdf_file.filename):
-        filename = secure_filename(pdf_file.filename)
-        pdf_path = os.path.join(app.config["UPLOAD_FOLDER"], filename)
-        pdf_file.save(pdf_path)
-        flash("El archivo PDF se ha cargado correctamente", "success")
-        return redirect(url_for("dashboard", pdf_file=filename))
-
-    flash("El archivo seleccionado no es un PDF válido", "error")
-    return redirect(url_for("index"))
-
-
 # Ruta para el dashboard (preview del PDF seleccionado)
 @app.route("/dashboard/<pdf_file>")
 def dashboard(pdf_file):

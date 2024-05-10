@@ -19,7 +19,7 @@
         <div class="card">
           <!-- Barra de búsqueda -->
           <form id="search-form" action="{{ url_for('search') }}" method="post">
-            <h3>Opciones de busqueda</h3>
+            <h3>Opciones de búsqueda</h3>
             <div class="email">
               <label>Email address</label>
               <input
@@ -63,9 +63,7 @@
               name="pdf_file"
               value="{{ pdf_file }}"
             />
-            <button class="buscar" type="submit" class="btn btn-primary mb-3">
-              Buscar
-            </button>
+            <button type="submit" class="btn btn-primary mb-3">Buscar</button>
           </form>
           <!--<p>{{ num_pages }} páginas</p>-->
           <h2 style="margin-top: 20px" class="marca">@By_Yan_18</h2>
@@ -73,7 +71,26 @@
       </div>
     </div>
   </div>
-
-  {% include "js/search.validator.html" %}
 </div>
-{% endblock %}
+
+<style>
+  #loadingModal.show-modal {
+    display: block;
+  }
+</style>
+
+<!-- Modal de carga -->
+<div class="modal" id="loadingModal">
+  <div class="modal-content">
+    <div class="modal-header">
+      <div class="spinner-container" id="loadingSpinner">
+        <div class="spinner"></div>
+      </div>
+    </div>
+    <div class="modal-body">
+      <h3>Buscando...</h3>
+    </div>
+  </div>
+</div>
+
+{% include "js/search.validator.html" %} {% endblock %}

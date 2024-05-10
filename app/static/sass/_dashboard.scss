@@ -78,12 +78,69 @@
                 }
               }
             }
-            .buscar{
-                margin-bottom: 30px;
+            .buscar {
+              margin-bottom: 30px;
             }
           }
         }
       }
     }
   }
+}
+
+.modal {
+  top: 0;
+  position: absolute;
+  height: 107vh;
+  width: 100%;
+  justify-content: center;
+  align-items: center;
+  background: #00000096;
+
+  .modal-content {
+    background: #fff;
+    width: 500px;
+    padding: 30px;
+    display: grid;
+    justify-items: center;
+    border-radius: 15px;
+    .modal-header {
+      .spinner-container {
+        width: 100%;
+        height: 100%;
+      }
+
+      .spinner {
+        border: 4px solid #fcdaff; /* Gris claro */
+        border-top: 4px solid #b112e7; /* Azul */
+        border-radius: 50%;
+        width: 50px;
+        height: 50px;
+        animation: spin 1s linear infinite; /* Animación de rotación */
+        margin-bottom: 20px;
+      }
+
+      @keyframes spin {
+        0% {
+          transform: rotate(0deg);
+        }
+        100% {
+          transform: rotate(360deg);
+        }
+      }
+    }
+  }
+  .modal-body {
+    h3 {
+      font-family: $font-Montserrat-bold;
+      color: #a237b4;
+    }
+  }
+}
+
+.show-modal {
+  display: flex !important;
+}
+#loadingModal {
+  display: none;
 }
